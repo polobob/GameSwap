@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Fichier d'informations visuelles du jeu - GameSwap
+    Placez ce fichier dans le dossier du jeu : Jeux\[NomDuJeu]\[NomDuJeu]_info.xml
+    Tous les champs sont FACULTATIFS. Laissez vide si non applicable.
+
+    Contraintes de la vignette (Thumbnail) :
+      - Formats acceptes    : PNG ou JPG uniquement
+      - Dimensions recomm.  : 300x400 px (ratio 3:4, portrait)
+      - Dimensions max      : 600x900 px
+      - Taille fichier max  : 300 Ko
+      - Nom du fichier      : [NomDuJeu].png ou [NomDuJeu].jpg
+      - Emplacement         : dans le meme dossier que le VHDX
+-->
+<GameExtraInfo>
+  <DisplayName>Nom Complet Du Jeu</DisplayName>
+  <ReleaseYear>2004</ReleaseYear>
+  <Trailer>https://www.youtube.com/watch?v=...</Trailer>
+  <MaxPlayers>8</MaxPlayers>
+  <Thumbnail>NomDuJeu.jpg</Thumbnail>
+  <Description>Courte description du jeu visible avant telechargement.</Description>
+  <Instructions>Instructions facultatives visibles dans l'onglet Mes Jeux (installation, configuration, notes...).</Instructions>
+</GameExtraInfo>

@@ -1,0 +1,16 @@
+# Logs d'execution GameSwap
+logs/
+
+# Archives binaires
+*.zip
+
+# Fichiers systeme Windows
+Thumbs.db
+desktop.ini
+
+# PowerShell
+*.ps1.bak
+
+# Editeurs
+.vscode/
+*.suo
