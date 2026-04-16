@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GameSwap — Guide d'utilisation</title>
+<style>
+  /* ── Polices ── */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+  /* ── Variables ── */
+  :root {
+    --base:    #1e1e2e;
+    --mantle:  #181825;
+    --surface: #313244;
+    --overlay: #45475a;
+    --text:    #cdd6f4;
+    --subtext: #9399b2;
+    --mauve:   #cba6f7;
+    --blue:    #89b4fa;
+    --green:   #a6e3a1;
+    --peach:   #fab387;
+    --red:     #f38ba8;
+    --yellow:  #f9e2af;
+    --teal:    #94e2d5;
+  }
+
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #f4f4f8;
+    color: #1a1a2e;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ── Page wrapper ── */
+  .page {
+    max-width: 800px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+  }
+
+  /* ── Couverture ── */
+  .cover {
+    background: var(--base);
+    color: var(--text);
+    padding: 48px 48px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .cover-icon {
+    font-size: 52px;
+    line-height: 1;
+  }
+  .cover-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--mauve);
+    letter-spacing: -0.5px;
+  }
+  .cover-sub {
+    font-size: 15px;
+    color: var(--subtext);
+    margin-top: 4px;
+  }
+  .cover-version {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--overlay);
+  }
+
+  /* ── Corps ── */
+  .body {
+    padding: 40px 48px;
+  }
+
+  /* ── Sections ── */
+  section {
+    margin-bottom: 36px;
+  }
+  section:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Titres ── */
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+    border-left: 4px solid #cba6f7;
+    padding-left: 12px;
+    margin-bottom: 14px;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #6b6b8a;
+    margin: 18px 0 8px;
+  }
+
+  /* ── Paragraphes ── */
+  p {
+    margin-bottom: 10px;
+    color: #2a2a3e;
+  }
+
+  /* ── Étapes numérotées ── */
+  ol.steps {
+    padding-left: 0;
+    counter-reset: step;
+    list-style: none;
+  }
+  ol.steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    min-width: 26px;
+    height: 26px;
+    background: var(--base);
+    color: var(--mauve);
+    font-weight: 700;
+    font-size: 13px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  ol.steps li span { color: #2a2a3e; }
+
+  /* ── Listes simples ── */
+  ul.list {
+    padding-left: 0;
+    list-style: none;
+  }
+  ul.list li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+    color: #2a2a3e;
+  }
+  ul.list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #cba6f7;
+    font-size: 11px;
+    top: 7px;
+  }
+
+  /* ── Boîtes colorées ── */
+  .box {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  .box-info {
+    background: #eef4ff;
+    border-left: 4px solid #89b4fa;
+    color: #1a3060;
+  }
+  .box-tip {
+    background: #f0faf2;
+    border-left: 4px solid #a6e3a1;
+    color: #1a4020;
+  }
+  .box-warn {
+    background: #fff8ee;
+    border-left: 4px solid #fab387;
+    color: #4a2800;
+  }
+  .box strong { display: block; margin-bottom: 4px; }
+
+  /* ── Onglets (pills) ── */
+  .tab {
+    display: inline-block;
+    background: var(--base);
+    color: var(--mauve);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin: 0 2px;
+    vertical-align: middle;
+  }
+
+  /* ── Boutons (représentation) ── */
+  .btn {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 4px;
+    vertical-align: middle;
+    margin: 0 2px;
+  }
+  .btn-green  { background: #a6e3a1; color: #1a4020; }
+  .btn-blue   { background: #89b4fa; color: #0d1a40; }
+  .btn-purple { background: #cba6f7; color: #1a0840; }
+  .btn-red    { background: #f38ba8; color: #400d1a; }
+  .btn-orange { background: #fab387; color: #401a00; }
+  .btn-teal   { background: #94e2d5; color: #003830; }
+
+  /* ── Tableau prérequis ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  th {
+    background: #f0f0f8;
+    text-align: left;
+    padding: 8px 12px;
+    font-weight: 600;
+    color: #3a3a5a;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    color: #2a2a3e;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* ── Séparateur ── */
+  hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 32px 0;
+  }
+
+  /* ── Zone capture d'écran ── */
+  .screenshot {
+    background: #f8f8fc;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    margin: 14px 0;
+  }
+  .screenshot em { display: block; font-style: italic; margin-top: 4px; }
+
+  /* ── Footer ── */
+  .footer {
+    background: #f8f8fc;
+    border-top: 1px solid #eee;
+    padding: 16px 48px;
+    font-size: 11px;
+    color: #9399b2;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── IMPRESSION ── */
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .page { box-shadow: none; border-radius: 0; margin: 0; max-width: 100%; }
+    .cover { background: #1e1e2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 32px 40px; }
+    .body { padding: 28px 40px; }
+    h2 { page-break-after: avoid; }
+    section { page-break-inside: avoid; }
+    .box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .footer { background: #f8f8fc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COUVERTURE -->
+  <div class="cover">
+    <div class="cover-icon">▶</div>
+    <div>
+      <div class="cover-title">GameSwap</div>
+      <div class="cover-sub">Guide d'utilisation — partage de jeux en réseau local</div>
+      <div class="cover-version">Version 1.0 &nbsp;·&nbsp; Avril 2026</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- 1. C'EST QUOI ? -->
+    <section>
+      <h2>Qu'est-ce que GameSwap ?</h2>
+      <p>
+        GameSwap permet à plusieurs joueurs d'un même réseau (box internet ou routeur commun)
+        de <strong>partager et télécharger des jeux</strong> entre eux, sans clé USB ni disque dur externe.
+        Chaque joueur met ses jeux à disposition sur le réseau, les autres les voient et peuvent les récupérer en quelques clics.
+      </p>
+      <div class="box box-info">
+        <strong>💡 En résumé</strong>
+        Vous partagez vos jeux → vos amis les voient → ils téléchargent ce qui les intéresse → ils jouent directement.
+      </div>
+    </section>
+
+    <hr/>
+
+    <!-- 2. PRÉREQUIS -->
+    <section>
+      <h2>Avant de commencer</h2>
+      <table>
+        <tr><th>Requis</th><th>Détail</th></tr>
+        <tr><td>Windows 10 ou 11</td><td>Tout ordinateur récent convient</td></tr>
+        <tr><td>Droits administrateur</td><td>Nécessaire uniquement au premier lancement</td></tr>
+        <tr><td>Réseau local commun</td><td>Tous les joueurs branchés sur la même box/routeur</td></tr>
+        <tr><td>nmap</td><td>Installé automatiquement par GameSwap si absent</td></tr>
+      </table>
+      <div class="box box-warn">
+        <strong>⚠️ Important</strong>
+        GameSwap doit toujours être lancé via <strong>Start-GameSwap.bat</strong> (clic droit → Exécuter en tant qu'administrateur si demandé).
+      </div>
+    </section>
+
+    <hr/>
+
+    <!-- 3. PREMIER LANCEMENT -->
+    <section>
+      <h2>Premier lancement</h2>
+      <p>La première fois, un assistant vous guide en deux étapes :</p>
+      <ol class="steps">
+        <li><span>Double-cliquez sur <strong>Start-GameSwap.bat</strong>. Acceptez la demande d'élévation si Windows vous la propose.</span></li>
+        <li><span>Choisissez le <strong>dossier d'installation</strong> (là où vos jeux seront stockés). Exemple : <code>D:\</code> ou <code>C:\GameSwap</code>.</span></li>
+        <li><span>Entrez votre <strong>nom de joueur</strong> (lettres et chiffres uniquement, 20 caractères max). C'est le nom que les autres verront sur le réseau.</span></li>
+        <li><span>Cliquez sur <strong>Terminer</strong>. GameSwap configure tout automatiquement.</span></li>
+      </ol>
+      <div class="box box-tip">
+        <strong>✅ Après le premier lancement</strong>
+        Un partage réseau est créé automatiquement sur votre PC. Les autres joueurs pourront voir vos jeux depuis leur propre GameSwap.
+      </div>
+    </section>
+
+    <hr/>
+
+    <!-- 4. INTERFACE -->
+    <section>
+      <h2>L'interface principale</h2>
+      <p>L'application comporte trois onglets accessibles en haut de la fenêtre :</p>
+      <ul class="list">
+        <li><span class="tab">🎮 Mes Jeux</span> — vos jeux installés sur votre PC</li>
+        <li><span class="tab">🌐 Réseau</span> — les jeux disponibles chez les autres joueurs</li>
+        <li><span class="tab">⚙ Paramétrage</span> — vos réglages et outils</li>
+      </ul>
+    </section>
+
+    <hr/>
+
+    <!-- 5. MES JEUX -->
+    <section>
+      <h2>Onglet — Mes Jeux</h2>
+      <p>Cet onglet affiche tous les jeux présents dans votre dossier GameSwap.</p>
+
+      <h3>Actions disponibles</h3>
+      <ul class="list">
+        <li><span class="btn btn-blue">⬇ Installer</span> Lance l'installation du jeu (configuration automatique).</li>
+        <li><span class="btn btn-green">▶ Jouer</span> Monte le jeu et le lance directement.</li>
+        <li><span class="btn btn-teal">► Serveur</span> Lance un serveur dédié (si le jeu le supporte).</li>
+        <li><span class="btn btn-orange">Désinstaller</span> Retire la configuration du jeu (le fichier reste).</li>
+        <li><span class="btn btn-red">Supprimer</span> Supprime définitivement le fichier du jeu.</li>
+      </ul>
+
+      <h3>Panneau de droite</h3>
+      <p>En sélectionnant un jeu dans la liste, le panneau droit affiche sa vignette, son année de sortie, le nombre de joueurs max, sa description et ses instructions.</p>
+
+      <div class="box box-info">
+        <strong>💡 Astuce</strong>
+        Un jeu affiché en <strong style="color:#f9e2af">jaune</strong> n'est pas encore installé — vous pouvez quand même le mettre à disposition sur le réseau pour que les autres le téléchargent.
+      </div>
+    </section>
+
+    <hr/>
+
+    <!-- 6. RÉSEAU -->
+    <section>
+      <h2>Onglet — Réseau</h2>
+      <p>Cet onglet permet de voir et télécharger les jeux des autres joueurs.</p>
+
+      <h3>Scanner le réseau</h3>
+      <ol class="steps">
+        <li><span>Cliquez sur <span class="btn btn-purple">🔍 Scanner le réseau</span>. La recherche dure quelques secondes.</span></li>
+        <li><span>Les joueurs trouvés apparaissent dans la liste de gauche. Cliquez sur un joueur pour voir ses jeux.</span></li>
+        <li><span>Sélectionnez un jeu dans la liste du bas pour voir sa description à droite.</span></li>
+      </ol>
+
+      <h3>Télécharger un jeu</h3>
+      <ol class="steps">
+        <li><span>Sélectionnez le jeu souhaité puis cliquez sur <span class="btn btn-blue">⬇ Télécharger ce jeu</span>.</span></li>
+        <li><span>La progression s'affiche en bas (pourcentage, temps écoulé, temps restant).</span></li>
+        <li><span>Une fois téléchargé, le jeu apparaît automatiquement dans l'onglet <span class="tab">Mes Jeux</span>.</span></li>
+      </ol>
+
+      <div class="box box-tip">
+        <strong>✅ File d'attente automatique</strong>
+        Si le joueur distant a atteint son nombre maximum de téléchargements simultanés, votre téléchargement se met en attente et démarre automatiquement dès qu'une place se libère.
+      </div>
+
+      <div class="box box-warn">
+        <strong>⚠️ Annuler</strong>
+        Utilisez <span class="btn btn-orange">■ Stopper</span> pour annuler un téléchargement en cours, ou <span class="btn" style="background:#f5c2e7;color:#40001a">Annuler l'attente</span> pour quitter la file d'attente.
+      </div>
+    </section>
+
+    <hr/>
+
+    <!-- 7. PARAMÉTRAGE -->
+    <section>
+      <h2>Onglet — Paramétrage</h2>
+
+      <h3>Nom du joueur</h3>
+      <p>Modifiez votre nom visible sur le réseau puis cliquez sur <span class="btn btn-purple">Appliquer</span>.</p>
+
+      <h3>Dossier des jeux</h3>
+      <p>Changez l'emplacement de votre bibliothèque. Vous pourrez déplacer vos jeux existants vers le nouveau dossier.</p>
+
+      <h3>Téléchargements simultanés</h3>
+      <p>Définissez combien de joueurs peuvent télécharger chez vous en même temps (par défaut : 3). Cliquez sur <span class="btn btn-pink" style="background:#f2cdcd;color:#400">Appliquer</span> pour enregistrer.</p>
+
+      <h3>Redistribuables système</h3>
+      <p>Ces boutons installent les composants nécessaires à de nombreux jeux :</p>
+      <ul class="list">
+        <li><strong>Visual C++ (toutes versions)</strong> — librairies requises par la plupart des jeux PC (2005 à 2022).</li>
+        <li><strong>DirectX June 2010</strong> — composants DirectX 9 nécessaires aux jeux anciens.</li>
+      </ul>
+      <div class="box box-info">
+        <strong>💡 À installer une seule fois</strong>
+        Si certains jeux ne démarrent pas, commencez par installer ces deux redistribuables.
+      </div>
+
+      <h3>Téléchargements actifs</h3>
+      <p>Ce tableau liste les téléchargements en cours sur votre partage (qui télécharge quoi). Vous pouvez libérer manuellement un slot bloqué avec <span class="btn" style="background:#f5e0dc;color:#400">Libérer</span>.</p>
+    </section>
+
+    <hr/>
+
+    <!-- 8. FAQ -->
+    <section>
+      <h2>Questions fréquentes</h2>
+
+      <h3>Les autres joueurs ne voient pas mon partage</h3>
+      <ul class="list">
+        <li>Vérifiez que vous êtes bien sur le même réseau (même box/routeur).</li>
+        <li>Vérifiez que le pare-feu Windows n'est pas en train de bloquer le partage de fichiers.</li>
+        <li>Relancez GameSwap — le partage est recréé automatiquement au démarrage.</li>
+      </ul>
+
+      <h3>Un jeu ne se lance pas après installation</h3>
+      <ul class="list">
+        <li>Installez les redistribuables Visual C++ et DirectX depuis l'onglet Paramétrage.</li>
+        <li>Consultez les instructions du jeu dans le panneau droit de l'onglet Mes Jeux.</li>
+      </ul>
+
+      <h3>Le téléchargement est bloqué en attente</h3>
+      <ul class="list">
+        <li>Le joueur source a atteint sa limite de téléchargements simultanés.</li>
+        <li>GameSwap reessaie automatiquement toutes les 30 secondes.</li>
+        <li>Vous pouvez cliquer sur <span class="btn" style="background:#f5c2e7;color:#40001a">Annuler l'attente</span> pour abandonner.</li>
+      </ul>
+
+      <h3>Où se trouvent les logs en cas de problème ?</h3>
+      <ul class="list">
+        <li>Dans le dossier <strong>logs\</strong> à la racine du dossier GameSwap.</li>
+        <li>Le fichier du jour est nommé <code>GameSwap_AAAAMMJJ.log</code>.</li>
+      </ul>
+    </section>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>GameSwap v1.0 — Guide d'utilisation</span>
+    <span>github.com/polobob/GameSwap</span>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
