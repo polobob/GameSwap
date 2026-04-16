@@ -2064,8 +2064,8 @@ try {
     Invoke-WebRequest -Uri $url -OutFile $dest -UseBasicParsing
     Write-Host "Telechargement termine." -ForegroundColor Green
     Write-Host ""
-    Write-Host "Lancement de l'installation - suivez les instructions a l'ecran..." -ForegroundColor Yellow
-    Start-Process -FilePath $dest -Wait
+    Write-Host "Installation en cours (mode silencieux - evite la proposition barre Bing)..." -ForegroundColor Yellow
+    Start-Process -FilePath $dest -ArgumentList "/Q" -Wait
     Remove-Item $dest -Force -ErrorAction SilentlyContinue
     Write-Host ""
     Write-Host "=== Installation DirectX terminee ===" -ForegroundColor Cyan
