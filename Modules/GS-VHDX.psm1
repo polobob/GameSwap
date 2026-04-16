@@ -165,18 +165,10 @@ function Get-MountedGSVhdxPathByDrive {
         $disk = Get-Disk -Number $partition.DiskNumber -ErrorAction SilentlyContinue
         if (-not $disk) { return $null }
 
-        # Chercher dans les images dont on connait le chemin
-        $allImages = Get-DiskImage -ErrorAction SilentlyContinue
-        if (-not $allImages) { return $null }
-
-        foreach ($img in @($allImages)) {
-            if (-not $img.Attached -or [string]::IsNullOrEmpty($img.ImagePath)) { continue }
-            try {
-                $imgDisk = Get-Disk -Number $img.DiskNumber -ErrorAction SilentlyContinue
-                if ($imgDisk -and $imgDisk.DiskNumber -eq $disk.DiskNumber) {
-                    return $img.ImagePath
-                }
-            } catch { }
+        # Pour un VHDX monte via Mount-DiskImage, la propriete Location contient le chemin du fichier
+        $location = $disk.Location
+        if (-not [string]::IsNullOrEmpty($location) -and (Test-Path $location)) {
+            return $location
         }
     } catch {
         Write-GSLog "Erreur recherche VHDX monte: $_" -Level "DEBUG"
