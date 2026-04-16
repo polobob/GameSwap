@@ -889,6 +889,24 @@ function Show-GSMainWindow {
                         </StackPanel>
                     </StackPanel>
 
+                    <!-- Redistribuables systeme -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,8,0,0">
+                        <TextBlock Text="Redistribuables systeme" Foreground="#9399B2"
+                                   FontSize="12" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="btnInstallVCRedist"
+                                    Content="&#9660;  Visual C++ (toutes versions)"
+                                    Padding="14,8" Margin="0,0,12,0"
+                                    Background="#E5C890" Foreground="#1E1E2E"
+                                    BorderThickness="0" Cursor="Hand" FontSize="12" FontWeight="SemiBold"/>
+                            <Button x:Name="btnInstallDirectX"
+                                    Content="&#9660;  DirectX June 2010"
+                                    Padding="14,8"
+                                    Background="#81C8BE" Foreground="#1E1E2E"
+                                    BorderThickness="0" Cursor="Hand" FontSize="12" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </StackPanel>
+
                     <TextBlock x:Name="txtSettingsStatus" Grid.Row="3" Grid.Column="0"
                                Grid.ColumnSpan="3"
                                Foreground="#9399B2" FontSize="12" Margin="0,16,0,0"/>
@@ -1826,6 +1844,8 @@ function Show-GSMainWindow {
     $btnSlotsDown          = $window.FindName("btnSlotsDown")
     $btnSlotsUp            = $window.FindName("btnSlotsUp")
     $btnApplySlots         = $window.FindName("btnApplySlots")
+    $btnInstallVCRedist    = $window.FindName("btnInstallVCRedist")
+    $btnInstallDirectX     = $window.FindName("btnInstallDirectX")
 
     # Pré-remplir les champs
     $txtSettingsPlayerName.Text = $Settings.PlayerName
@@ -1973,6 +1993,90 @@ function Show-GSMainWindow {
             $txtSettingsStatus.Text = "Erreur : $_"
             Write-GSLog "Erreur changement dossier : $_" -Level "ERROR"
         }
+    })
+
+    # -----------------------------------------------------------------------
+    # Visual C++ Redistributables (toutes versions via winget)
+    # -----------------------------------------------------------------------
+    $btnInstallVCRedist.Add_Click({
+        $scriptFile = Join-Path $env:TEMP "GS_Install_VCRedist.ps1"
+        $scriptContent = @'
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Write-Host "=== GameSwap - Installation Visual C++ Redistributables ===" -ForegroundColor Cyan
+Write-Host ""
+
+$packages = @(
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2005.x86'; Name = 'Visual C++ 2005 x86' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2005.x64'; Name = 'Visual C++ 2005 x64' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2008.x86'; Name = 'Visual C++ 2008 x86' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2008.x64'; Name = 'Visual C++ 2008 x64' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2010.x86'; Name = 'Visual C++ 2010 x86' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2010.x64'; Name = 'Visual C++ 2010 x64' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2012.x86'; Name = 'Visual C++ 2012 x86' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2012.x64'; Name = 'Visual C++ 2012 x64' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2013.x86'; Name = 'Visual C++ 2013 x86' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2013.x64'; Name = 'Visual C++ 2013 x64' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2015+.x86'; Name = 'Visual C++ 2015-2022 x86' },
+    [PSCustomObject]@{ Id = 'Microsoft.VCRedist.2015+.x64'; Name = 'Visual C++ 2015-2022 x64' }
+)
+
+$ok = 0; $deja = 0; $fail = 0
+foreach ($pkg in $packages) {
+    Write-Host "--- $($pkg.Name) ---" -ForegroundColor Yellow
+    winget install --id $pkg.Id --accept-package-agreements --accept-source-agreements
+    $code = $LASTEXITCODE
+    if ($code -eq 0) {
+        $ok++
+        Write-Host "  OK" -ForegroundColor Green
+    } elseif ($code -eq -1978335189) {
+        $deja++
+        Write-Host "  Deja installe" -ForegroundColor DarkGray
+    } else {
+        $fail++
+        Write-Host "  Avertissement (code $code)" -ForegroundColor DarkYellow
+    }
+    Write-Host ""
+}
+
+Write-Host "=== Termine : $ok installe(s)  $deja deja present(s)  $fail avertissement(s) ===" -ForegroundColor Cyan
+Read-Host "`nAppuyez sur Entree pour fermer"
+'@
+        [System.IO.File]::WriteAllText($scriptFile, $scriptContent, [System.Text.Encoding]::UTF8)
+        Start-Process "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptFile`""
+    })
+
+    # -----------------------------------------------------------------------
+    # DirectX June 2010 (web installer)
+    # -----------------------------------------------------------------------
+    $btnInstallDirectX.Add_Click({
+        $scriptFile = Join-Path $env:TEMP "GS_Install_DirectX.ps1"
+        $scriptContent = @'
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Write-Host "=== GameSwap - Installation DirectX June 2010 ===" -ForegroundColor Cyan
+Write-Host ""
+
+$url  = "https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe"
+$dest = Join-Path $env:TEMP "dxwebsetup.exe"
+
+try {
+    Write-Host "Telechargement du web installer en cours..." -ForegroundColor Yellow
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $dest -UseBasicParsing
+    Write-Host "Telechargement termine." -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Lancement de l'installation - suivez les instructions a l'ecran..." -ForegroundColor Yellow
+    Start-Process -FilePath $dest -Wait
+    Remove-Item $dest -Force -ErrorAction SilentlyContinue
+    Write-Host ""
+    Write-Host "=== Installation DirectX terminee ===" -ForegroundColor Cyan
+} catch {
+    Write-Host "Erreur : $_" -ForegroundColor Red
+}
+
+Read-Host "`nAppuyez sur Entree pour fermer"
+'@
+        [System.IO.File]::WriteAllText($scriptFile, $scriptContent, [System.Text.Encoding]::UTF8)
+        Start-Process "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptFile`""
     })
 
     # -----------------------------------------------------------------------
