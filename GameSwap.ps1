@@ -58,6 +58,26 @@ if (-not (Test-MountDiskImage)) {
 Write-GSLog "Mount-DiskImage disponible" -Level "INFO"
 
 # ---------------------------------------------------------------------------
+# Verification du lecteur U: (VHDX residuel d'une session precedente)
+# ---------------------------------------------------------------------------
+if (Test-Path "U:\") {
+    Write-GSLog "Lecteur U: deja monte au demarrage - tentative de demontage..." -Level "WARNING"
+    Dismount-GSVhdx
+    Start-Sleep -Milliseconds 500
+    if (Test-Path "U:\") {
+        Write-GSLog "Impossible de demonter le lecteur U:" -Level "ERROR"
+        Add-Type -AssemblyName PresentationFramework
+        [System.Windows.MessageBox]::Show(
+            "Le lecteur U: est occupe et n'a pas pu etre libere automatiquement." +
+            "`n`nGameSwap utilise la lettre U: pour monter les jeux." +
+            "`n`nFermez le programme qui utilise U: puis relancez GameSwap.",
+            "Lecteur U: occupe", "OK", "Warning") | Out-Null
+    } else {
+        Write-GSLog "Lecteur U: demonté avec succes au demarrage" -Level "INFO"
+    }
+}
+
+# ---------------------------------------------------------------------------
 # Chargement des parametres
 # ---------------------------------------------------------------------------
 $Settings = Get-GSSettings
