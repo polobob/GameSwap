@@ -110,4 +110,4 @@ Un NAS peut exposer un partage `GameSwap` avec le même compte (`GameSwap` / mot
 
 ## Documentation complète
 
-Voir [GAMESWAP.md](GAMESWAP.md) pour la documentation technique détaillée (modules, formats de fichiers, décisions de conception).
+Voir [GAMESWAP.md](Docs/GAMESWAP.md) pour la documentation technique détaillée (modules, formats de fichiers, décisions de conception).
