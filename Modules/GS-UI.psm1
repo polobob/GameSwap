@@ -1575,16 +1575,18 @@ function Show-GSMainWindow {
             $btnRemoteWebsite.Visibility = "Collapsed"
         }
 
-        if ($game.ThumbPath) {
+        if ($game.ThumbBytes) {
             try {
+                $ms  = New-Object System.IO.MemoryStream(,$game.ThumbBytes)
                 $bmp = New-Object System.Windows.Media.Imaging.BitmapImage
                 $bmp.BeginInit()
-                $bmp.CacheOption = [System.Windows.Media.Imaging.BitmapCacheOption]::OnLoad
-                $bmp.UriSource   = [Uri]::new($game.ThumbPath, [System.UriKind]::Absolute)
+                $bmp.CacheOption  = [System.Windows.Media.Imaging.BitmapCacheOption]::OnLoad
+                $bmp.StreamSource = $ms
                 $bmp.EndInit()
                 $bmp.Freeze()
-                $imgRemoteThumb.Source      = $bmp
-                $imgRemoteThumb.Visibility  = "Visible"
+                $ms.Dispose()
+                $imgRemoteThumb.Source       = $bmp
+                $imgRemoteThumb.Visibility   = "Visible"
                 $brdRemoteNoThumb.Visibility = "Collapsed"
             } catch {
                 $imgRemoteThumb.Visibility   = "Collapsed"
@@ -1644,7 +1646,7 @@ function Show-GSMainWindow {
             if ($sync.IsComplete) {
                 $script:DlTimer.Stop()
                 $pbDownload.Value      = 100
-                $sharePath2 = "\\$hostIP\GameSwap"
+                $sharePath2 = "\\$($sync.HostIP)\GameSwap"
                 cmd /c "net use $sharePath2 /DELETE /Y" 2>&1 | Out-Null
 
                 if ($sync.HasError) {
@@ -1654,7 +1656,7 @@ function Show-GSMainWindow {
                     $txtStatusBar.Text = "Echec du telechargement."
                 } else {
                     [System.Windows.MessageBox]::Show(
-                        "'$gameName' telecharge avec succes !`nVous pouvez maintenant l'installer depuis l'onglet Mes Jeux.",
+                        "'$($sync.GameName)' telecharge avec succes !`nVous pouvez maintenant l'installer depuis l'onglet Mes Jeux.",
                         "Telechargement termine", "OK", "Information")
                     $txtStatusBar.Text = "Telechargement termine."
                     & $loadLocalGames

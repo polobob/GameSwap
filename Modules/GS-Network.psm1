@@ -223,6 +223,12 @@ function Get-RemoteGameList {
                     } catch {}
                 }
 
+                # Lire les bytes de la vignette pendant que le partage est connecte
+                $thumbBytes = $null
+                if ($thumbPath) {
+                    try { $thumbBytes = [System.IO.File]::ReadAllBytes($thumbPath) } catch {}
+                }
+
                 $games += [PSCustomObject]@{
                     GameName    = $folder.Name
                     SizeText    = $sizeStr
@@ -231,6 +237,7 @@ function Get-RemoteGameList {
                     HostIP      = $HostIP
                     ExtraInfo   = $extraInfo
                     ThumbPath   = $thumbPath
+                    ThumbBytes  = $thumbBytes
                 }
             }
         }

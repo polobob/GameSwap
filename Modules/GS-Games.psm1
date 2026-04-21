@@ -291,6 +291,7 @@ function Copy-RemoteGame {
         ErrorMsg    = ""
         DestFile    = $destFile
         GameName    = $GameName
+        HostIP      = $HostIP
         StartTime   = [datetime]::Now
         Elapsed     = ""
         ETA         = ""

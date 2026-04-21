@@ -131,9 +131,27 @@ try {
 # ---------------------------------------------------------------------------
 Write-UninstallLog "Desinstallation de nmap..."
 try {
-    $nmapPkg = winget list --id Insecure.Nmap 2>&1 | Select-String "Insecure.Nmap"
-    if ($nmapPkg) {
-        winget uninstall --id Insecure.Nmap --silent --accept-source-agreements 2>&1 | Out-Null
+    $nmapUninstallExe = $null
+    $regPaths = @(
+        "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+        "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+    )
+    foreach ($regPath in $regPaths) {
+        $found = Get-ChildItem -Path $regPath -ErrorAction SilentlyContinue |
+            Get-ItemProperty -ErrorAction SilentlyContinue |
+            Where-Object { $_.DisplayName -like "*nmap*" } |
+            Select-Object -First 1
+        if ($found) {
+            # Extraire l'executable depuis UninstallString (ex: "C:\Program Files\Nmap\uninstall.exe")
+            $raw = $found.UninstallString
+            if ($raw -match '"([^"]+)"') { $nmapUninstallExe = $matches[1] }
+            elseif ($raw -match '^(\S+)') { $nmapUninstallExe = $matches[1] }
+            break
+        }
+    }
+
+    if ($nmapUninstallExe -and (Test-Path $nmapUninstallExe)) {
+        Start-Process -FilePath $nmapUninstallExe -ArgumentList "/S" -Wait -ErrorAction Stop
         Write-UninstallLog "nmap desinstalle"
     } else {
         Write-UninstallLog "nmap introuvable (deja desinstalle ou non present)" -Level "WARNING"
